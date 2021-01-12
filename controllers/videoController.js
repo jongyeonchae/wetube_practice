@@ -1,4 +1,8 @@
-export const home = (req, res) => res.render('home', { pageTitle: 'Home' });
+import {videos} from "../db"
+
+export const home = (req, res) => {
+    res.render('home', { pageTitle: 'Home', videos });
+};
 
 export const search = (req, res) => {
     // ES6 이전 코드로 작성 시, 아래와 동일
@@ -9,8 +13,6 @@ export const search = (req, res) => {
     } = req;    
     res.render('search', { pageTitle: 'Search', searchingBy });
 };
-
-export const videos = (req, res) => res.render('videos', { pageTitle: 'Videos' });
 
 export const upload = (req, res) => res.render('upload', { pageTitle: 'Upload' });
 

@@ -20,6 +20,12 @@ app.use(morgan("dev"));
 
 app.use(localsMiddleware);
 
+// helmet 업데이트로 비디오 재생 불가 > content security policy를 변경
+app.use(function(req, res, next) {
+    res.setHeader("Content-Security-Policy", "script-src 'self' https://archive.org");
+    return next();
+    });
+
 // get이 아닌 use 메서드를 쓰면, router 파일의 전체 경로를 지정함
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
