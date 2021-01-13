@@ -1,6 +1,25 @@
-// arrow function(=>)에는 암묵적으로 return 이 생략되어 있으므로, return을 쓰지 않아도 됨
-// export const join = (req, res) => return res.send('Join'); 과 같음
-export const join = (req, res) => res.render('join', { pageTitle: 'Join' });
+import routes from "../routes";
+
+export const getJoin = (req, res) => {
+    res.render('join', { pageTitle: 'Join' });
+};
+
+export const postJoin = (req, res) => {
+    // 사용자가 입력한 정보(name, email, password, password2)를 가져옴
+    const {
+        body: { name, email, password, password2 }
+    } = req;
+    if(password !== password2){
+        // status: Status Code(상태코드)
+        res.status(400);
+        res.render('join', { pageTitle: 'Join' });
+    } else {
+        // To Do: Register User
+        //  To Do: Log User
+        res.redirect(routes.home);
+    }
+};
+
 export const login = (req, res) => res.render('login', { pageTitle: 'Log In' });
 export const logout = (req, res) => res.render('logout', { ageTitle: 'Log Out' });
 export const users = (req, res) => res.render('users', { pageTitle: 'Users' });
