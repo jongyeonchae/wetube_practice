@@ -25,12 +25,26 @@ const routes = {
     logout: LOGOUT, 
     search: SEARCH,
     users: USERS,
-    userDetail: USER_DETAIL,
+    // login 시 로그인한 사용자의 id를 url에 포함시키기 위해 함수 설정 (id가 존재한다면, return ~)
+    // express JS는 :id 를 이해하지만 HTML은 이해하지 못하기 때문
+    userDetail: (id) => {
+        if(id){
+            return `/users/${id}`;
+        } else {
+            return USER_DETAIL;
+        }
+    },
     editProfile: EDIT_PROFILE,
     changePassword: CHANGE_PASSWORD,
     videos: VIDEOS, 
     upload: UPLOAD,
-    videoDetail: VIDEO_DETAIL,
+    videoDetail: (id) => {
+        if(id){
+            return `/videos/${id}`;
+        } else{
+            return VIDEO_DETAIL;
+        }
+    },
     editVideo: EDIT_VIDEO, 
     deleteVideo: DELETE_VIDEO
 };
