@@ -2,6 +2,7 @@
 //- 외부로부터 객체를 전달받으면, 객체명을 video 로 설정하고 함수를 실행
 mixin videoBlock(video = {})
     .videoBlock
-        video.videoBlock__thumnail(src=video.videoFile, controls=true)
-        h4.videoBlock__title=video.title
-        h6.videoBlock__views=video.views
+        a(href=routes.videoDetail(video.id))    
+            video.videoBlock__thumnail(src=video.videoFile, controls=true)
+            h4.videoBlock__title=video.title
+            h6.videoBlock__views=video.views

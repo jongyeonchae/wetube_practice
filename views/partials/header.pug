@@ -15,7 +15,7 @@ header.header
                     a(href=routes.login) Log In
             else 
                 li
-                    a(href=routes.upload) Upload
+                    a(href=`/videos${routes.upload}`) Upload
                 li
                     //- userDetail(user.id) 실행 시 `/users/${id}` 를 return
                     a(href=routes.userDetail(user.id)) Profile
