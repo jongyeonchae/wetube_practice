@@ -1,13 +1,17 @@
-import routes from "../routes"
+import routes from "../routes";
+import Video from "../models/Video";
 
-export const home = (req, res) => {
-    res.render('home', { pageTitle: 'Home', videos });
+export const home = async (req, res) => {
+    try {
+        const videos = await Video.find({});
+        res.render('home', { pageTitle: 'Home', videos });
+    } catch (error) {
+        console.log(error);
+        res.render("home", { pageTitle: "Home", videos: [] });
+    }
 };
 
 export const search = (req, res) => {
-    // ES6 이전 코드로 작성 시, 아래와 동일
-    // const searchingBy = req.query.term;
-    // res.render('search', { pageTitle: 'Search', searchingBy: searchingBy }); 
     const {
         query: { term: searchingBy }
     } = req;    
