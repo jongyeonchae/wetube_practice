@@ -11,11 +11,20 @@ export const home = async (req, res) => {
     }
 };
 
-export const search = (req, res) => {
+export const search = async (req, res) => {
     const {
         query: { term: searchingBy }
     } = req;
-    res.render('search', { pageTitle: 'Search', searchingBy });
+    // let 변수: videos 변수는 video가 업로드 된 경우 reassigned 될 것 
+    let videos = [];
+    try {
+        // $regex: 정규표현식으로 searchingBy를 포함한 단어 찾음 
+        // $options: "i": 대소문자 구분 없이 찾음(insensitive)
+        videos = await Video.find({ title: { $regex: searchingBy, $options: "i" } })
+    } catch (error) {
+        console.log(error);
+    }
+    res.render('search', { pageTitle: 'Search', searchingBy, videos });
 };
 
 export const getUpload = (req, res) =>
