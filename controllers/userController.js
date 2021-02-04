@@ -1,3 +1,4 @@
+import passport from "passport";
 import routes from "../routes";
 import User from "../models/User";
 
@@ -5,7 +6,7 @@ export const getJoin = (req, res) => {
   res.render("join", { pageTitle: "Join" });
 };
 
-export const postJoin = async (req, res) => {
+export const postJoin = async (req, res, next) => {
   // 사용자가 입력한 정보(name, email, password, password2)를 가져옴
   const {
     body: { name, email, password, password2 },
@@ -18,18 +19,22 @@ export const postJoin = async (req, res) => {
     try {
       const user = await User({ name, email });
       await User.register(user, password);
+      next();
     } catch (error) {
       console.log(error);
+      res.redirect(routes.home);
     }
-    //  To Do: Log User
-    res.redirect(routes.home);
   }
 };
 
 export const getLogin = (req, res) => res.render("login", { pageTitle: "Log In" });
-export const postLogin = (req, res) => {
-  res.redirect(routes.home);
-};
+
+// postJoin의 다음 middleware로, register된 User 정보를 전달받음
+// User.js에서의 usernameField 설정으로, authenticate 시 email, password를 확인
+export const postLogin = passport.authenticate("local", {
+  failureRedirect: routes.login,
+  successRedirect: routes.home,
+});
 
 export const logout = (req, res) => {
   // To Do: Process Log Out

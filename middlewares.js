@@ -7,11 +7,9 @@ const multerVideo = multer({ dest: "uploads/videos/" });
 export const localsMiddleware = (req, res, next) => {
   res.locals.siteName = "WeTube";
   res.locals.routes = routes;
-  // login 된 상태를 설정하기 위해 임의의 변수(user) 생성
-  res.locals.user = {
-    isAuthenticated: false,
-    id: 1,
-  };
+  // passport JS로 로그인되면, request에 user 객체를 부여함. 아래와 같이 locals로 설정하여, 나머지 template에서 로그인된 user 객체 접근.
+  res.locals.user = req.user || null;
+  console.log(req.user);
   next();
 };
 

@@ -3,11 +3,15 @@ import morgan from "morgan";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
+import passport from "passport";
+import session from "express-session";
 import { localsMiddleware } from "./middlewares";
 import routes from "./routes";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import globalRouter from "./routers/globalRouter";
+
+import "./passport";
 
 const app = express();
 
@@ -20,13 +24,23 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+app.use(
+  session({
+    secret: process.env.COOKIE_SECRET,
+    resave: true,
+    saveUninitialized: false,
+  })
+);
+// passport JS를 사용하기 위해 초기화하고(initialize), 내부적으로 session을 활용하여 전달받은 cookie에 부합하는 user를 찾음(session).
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(localsMiddleware);
 
 // helmet 업데이트로 비디오 재생 불가 > content security policy를 변경
 app.use(function (req, res, next) {
-    res.setHeader("Content-Security-Policy", "script-src 'self' https://archive.org");
-    return next();
+  res.setHeader("Content-Security-Policy", "script-src 'self' https://archive.org");
+  return next();
 });
 
 // get이 아닌 use 메서드를 쓰면, router 파일의 전체 경로를 지정함
