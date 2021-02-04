@@ -4,7 +4,9 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import passport from "passport";
+import mongoose from "mongoose";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import { localsMiddleware } from "./middlewares";
 import routes from "./routes";
 import userRouter from "./routers/userRouter";
@@ -14,6 +16,8 @@ import globalRouter from "./routers/globalRouter";
 import "./passport";
 
 const app = express();
+
+const CookieStore = MongoStore(session);
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.set("view engine", "pug");
@@ -29,6 +33,8 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     resave: true,
     saveUninitialized: false,
+    // CookieStore는 mongoose에 의해 mongo에 연결됨
+    store: new CookieStore({ mongooseConnection: mongoose.connection }),
   })
 );
 // passport JS를 사용하기 위해 초기화하고(initialize), 내부적으로 session을 활용하여 전달받은 cookie에 부합하는 user를 찾음(session).
