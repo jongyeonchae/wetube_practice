@@ -9,7 +9,7 @@ header.header
         .header__column
             ul
                 //- login 된 상태를 설정하기 위해 임의의 변수(user) 생성
-                if !user
+                if !loggedUser
                     li
                         a(href=routes.join) Join
                     li
@@ -18,8 +18,8 @@ header.header
                     li
                         a(href=`/videos${routes.upload}`) Upload
                     li
-                        //- userDetail(user.id) 실행 시 `/users/${id}` 를 return
-                        a(href=routes.userDetail(user.id)) Profile
+                        //- res.locals를 통해 loggedUser 확인 후 이동. (user.id를 활용할 경우, 로그인하지 않은 다른 user의 id로도 진입 가능하기 때문)
+                        a(href=routes.me) Profile
                     li  
                         a(href=routes.logout) Log Out
 
