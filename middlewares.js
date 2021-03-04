@@ -1,9 +1,32 @@
 import multer from "multer";
+import multers3 from "multer-s3";
+import aws from "aws-sdk";
 import routes from "./routes";
 
-// dest: /uploads/videos/ 로 표기할 시, 프로젝트 파일(WETUBE) 내 directory 로 오해할 수 있음 (서버가 아닌 하드웨어에 업로드)
-const multerVideo = multer({ dest: "uploads/videos/" });
-const multerAvatar = multer({ dest: "uploads/avatars/" });
+// s3 initialize: user, region 설정
+const s3 = new aws.S3({
+  accessKeyId: process.env.AWS_KEY,
+  secretAccessKey: process.env.AWS_PRIVATE_KEY,
+  region: "ap-northeast-1",
+});
+
+const multerVideo = multer({
+  storage: multers3({
+    s3,
+    acl: "public-read",
+    bucket: "wetube-2/video",
+  }),
+});
+const multerAvatar = multer({
+  storage: multers3({
+    s3,
+    acl: "public-read",
+    bucket: "wetube-2/avatars",
+  }),
+});
+
+export const uploadVideo = multerVideo.single("videoFile");
+export const uploadAvatar = multerAvatar.single("avatar");
 
 export const localsMiddleware = (req, res, next) => {
   res.locals.siteName = "WeTube";
@@ -28,6 +51,3 @@ export const onlyPrivate = (req, res, next) => {
     res.redirect(routes.home);
   }
 };
-
-export const uploadVideo = multerVideo.single("videoFile");
-export const uploadAvatar = multerAvatar.single("avatar");
