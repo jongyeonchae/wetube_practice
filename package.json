@@ -49,7 +49,7 @@
     "build": "npm run build:server && npm run build:assets && npm run copyAll",
     "prebuild": "rm -rf build",
     "start": "node build/init.js",
-    "prestart": "npm run build"
+    "prestart": "PRODUCTION=true npm run build"
 
   },
   "devDependencies": {
