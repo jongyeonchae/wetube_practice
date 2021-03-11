@@ -3,9 +3,8 @@ import dotenv from "dotenv";
 // dotenv.config(): .env 파일 import 및 파일 내 변수 접근 가능(process.env.KEY)
 dotenv.config();
 
-// terminal 에서 mongo 를 입력하여 mongo url 확인
-// useNewUrlParser, useFindMyModify 설정은 mongodb에서 요청사항이므로 기본으로 입력
-mongoose.connect(process.env.MONGO_URL_PROD, {
+// PRODUCTION 배포환경(PRODUCTION=true)이라면 MONGO_URL_PROD 을 사용, 아닐 경우 MONGO_URL 사용.
+mongoose.connect(process.env.PRODUCTION ? process.env.MONGO_URL_PROD : process.env.MONGO_URL, {
   useNewUrlParser: true,
   useFindAndModify: false,
 });
